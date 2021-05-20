@@ -23,10 +23,18 @@ end
 % calculate the leave-one-rror
 h = Z* pinv(Z'*Z) *Z';
 ELOO = sum(((U_val-Y_val)./(ones(1,n)-diag(h)')).^2)/n; % calculate the leaveoneerror
+<<<<<<< HEAD
 eLOO = ELOO / sum((U_val-mean(U_val)).^2);
 %eLOO_mod = eLOO * (1+trace(pinv(Z'*Z./val_n))/val_n)/(1-det(Z)/val_n); % modified the error by Heuristic modification factors to avoid overfitting
 
 % mean-squared error
 evar = sum((U_val-Y_val).^2) / sum((U_val-mean(U_val)).^2);
+=======
+eLOO = ELOO / sum((U_val-mean(U_val))^2);
+%eLOO_mod = eLOO * (1+trace(pinv(Z'*Z./val_n))/val_n)/(1-det(Z)/val_n); % modified the error by Heuristic modification factors to avoid overfitting
+
+% mean-squared error
+evar = sum((U_val-Y_val).^2) / sum((U_val-mean(U_val))^2);
+>>>>>>> 8749454245a48554ad3c8dc5eea589b914367d70
 
 end
