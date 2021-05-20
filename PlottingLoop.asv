@@ -6,23 +6,23 @@ clear all;
 min_power = 2; %starts at n=100
 max_power = 4; %ends at n=10000
 number_eval_n = 50; %50 points between min and max value 
-N = logspace(min_power, max_power, number_eval_n); %linearly distributed on a log scale)
-N=round(N);
+N = logspace(min_power, max_power, number_eval_n); %values linearly distributed on a log scale
+N=round(N); %functions only accept rounded values
 
 %desired values of p
-number_eval_p = 3;
+number_eval_p = 3; %three values of p
 P = zeros([1 number_eval_p]);
 for i=1:number_eval_p
-    P(1,i) = i+1 ;
+    P(1,i) = i+1 ; %p starts at 2
 end
 
 %matrixes for mean, variance and error
-Mean = zeros([number_eval_p number_eval_n]);
+Mean = zeros([2 number_eval_n]);
 Variance = zeros([number_eval_p number_eval_n]);
 LeastSquareError = zeros([number_eval_p number_eval_n]);
 LeaveOneOutError = zeros([number_eval_p number_eval_n]);
 
-M = 4; 
+M = 4; %4 inputs
 sampling = 'random'; %sampling type ('random' or 'hypercube')
 
 %while loop on the n values
@@ -45,11 +45,12 @@ while j<number_eval_n+1
                 U(1, i) = model_evaluation(c,M,E(:,i),Alpha);
             end
 
-        [ELOO,eLOO,evar] = leave_one_out(n,Z,u,U);
+        [ELOO,eLOO,evar] = leave_one_error(n,sampling,Z,c,Alpha);
     
         %storing values for mean, variance and error as a function of p
-        Mean(k,j) = mean(u)/mean(U)-1;
-        Variance(k,j) = var(u)/var(U)-1;
+        Mean(1,j) = c(1,1);
+        Mean(2,j) = mean(u);
+        Variance(k,j) = sum((u-mean(u)).^2)/sum((c).^2)-1;
         LeastSquareError(k,j) = evar;
         LeaveOneOutError(k,j) = eLOO;
         k=k+1;
@@ -84,11 +85,10 @@ legend('p=2','p=3','p=4');
 loglog(N, Mean(1,:));
 hold on
 loglog(N, Mean(2,:));
-loglog(N, Mean(3,:));
 hold off
-legend('p=2','p=3','p=4');
+legend('U','u');
  xlabel('number of evaluations');
- ylabel('Mean(E)/Mean(X) -1');
+ ylabel('Mean');
  
   figure(4)
 loglog(N, Variance(1,:));
@@ -98,15 +98,15 @@ loglog(N, Variance(3,:));
 hold off
 legend('p=2','p=3','p=4');
  xlabel('number of evaluations');
- ylabel('Variance(E)/Variance(X) -1');
+ ylabel('Variance(u)/Variance(U) -1');
 
 
-%------Exporting results as a txt file
+%------Exporting results as a dat file
 N=N';
 LeaveOneOutError=LeaveOneOutError';
 LeastSquareError=LeastSquareError';
 Mean=Mean';
 Variance=Variance';
-Results = horzcat(N, LeaveOneOutError, LeastSquareError, Variance);
+Results = horzcat(N, LeaveOneOutError, LeastSquareError, Variance, Mean);
 writematrix(Results,'Results.dat','Delimiter',' ')  
 

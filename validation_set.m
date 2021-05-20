@@ -8,7 +8,6 @@ function [E,X] = validation_set(n,sampling)
 %uniformly distributed on [-1,1];
 %X is a matrix of dimension 4xn containing the original variables samples
 
-
 if strcmp(sampling,'random') == 1
     [R_original,R_uniform] = input_sampling(n,'random','RCell','uniform');
     [GammaP_original,GammaP_uniform] = input_sampling(n,'random','GammaP','uniform');

@@ -48,9 +48,10 @@ while j<number_eval_n+1
         [ELOO,eLOO,evar] = leave_one_error(n,sampling,Z,c,Alpha);
     
         %storing values for mean, variance and error as a function of p
-        Mean(1,j) = mean(U);
+        Mean(1,j) = c(1,1);
         Mean(2,j) = mean(u);
-        Variance(k,j) = var(u)/var(U)-1;
+        c(1) = [];
+        Variance(k,j) = abs(sum(c.^2)/(sum((u-mean(u)).^2)/n)-1);
         LeastSquareError(k,j) = evar;
         LeaveOneOutError(k,j) = eLOO;
         k=k+1;
@@ -86,7 +87,7 @@ loglog(N, Mean(1,:));
 hold on
 loglog(N, Mean(2,:));
 hold off
-legend('p=2','p=3','p=4');
+legend('U','u');
  xlabel('number of evaluations');
  ylabel('Mean');
  

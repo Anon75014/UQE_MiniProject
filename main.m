@@ -14,10 +14,8 @@ sampling = 'random'; %sampling type ('random' or 'hypercube')
 
 %------ Regression matrix
 %--inputs
-p=4; %maximum degree of polynomials allowed
+p=2; %maximum degree of polynomials allowed
 u=voltage(X); %voltage calculated from original variables samples
-mean_u = mean(u);
-variance_u = var(u);
 %--outputs
 %Z: regression matrix (nxP) where P=(M+p)!/M!p!
 %Alpha: set of multi-indices that satisfy the requirement |α|≤p
@@ -29,10 +27,9 @@ variance_u = var(u);
 %U: voltage from PCE-evaluated model
 U = zeros([1 n]);
 for i=1:n
-    U(1, i) = model_evaluation(c,M,E(:,i),Alpha);
+        U(1, i) = model_evaluation(c,M,E(:,i),Alpha);
 end
-mean_U = mean(U);
-variance_U = var(U);
+
 
 %----- leave-one-out error
 %--outputs
@@ -40,8 +37,15 @@ variance_U = var(U);
 %evar: mean-squared error
 [ELOO,eLOO,evar] = leave_one_error(n,sampling,Z,c,Alpha);
 
-mean = mean(U)/mean(u)-1;
-variance = var(U)/var(u)-1;
+
+figure(1)
+histogram(U, 'Normalization', 'pdf', 'BinWidth',0.002);
+hold on
+histogram(u, 'Normalization', 'pdf', 'BinWidth',0.002);
+hold off
+xlabel('voltage (V)', 'interpreter','latex', 'FontSize', 12);
+ylabel('PDF', 'interpreter','latex','FontSize', 12);
+legend('U', 'u');
 
 
 
