@@ -5,7 +5,7 @@ M = 4; %number of distributed inputs (cell resistance, activity ratios and flow 
 
 %------ Experimental design
 %--inputs
-n=10000; %input size
+n=1000; %input size
 sampling = 'random'; %sampling type ('random' or 'hypercube')
 %--outputs
 %X: original variables samples (Mxn matrix)
@@ -47,5 +47,9 @@ xlabel('voltage (V)', 'interpreter','latex', 'FontSize', 12);
 ylabel('PDF', 'interpreter','latex','FontSize', 12);
 legend('U', 'u');
 
-
+%------Exporting results as a dat file
+u=u';
+U=U';
+Results = horzcat(u, U);
+writematrix(Results,'Uandup2.dat','Delimiter',' ')  
 

@@ -6,7 +6,7 @@ clear all;
 n_exp=10000;
 
 %desired values of p
-number_eval_p = 20;
+number_eval_p = 10;
 P = zeros([number_eval_p 1]);
 for i=1:number_eval_p
     P(i,1) = i ; %p starts at 1
