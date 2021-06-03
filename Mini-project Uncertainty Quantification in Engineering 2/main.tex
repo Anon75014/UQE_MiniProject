@@ -1,0 +1,561 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Intro to LaTeX and Template for Homework Assignments
+%% Quantitative Methods in Political Science
+%% University of Mannheim
+%% Fall 2018
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% created by Marcel Neunhoeffer & Sebastian Sternberg
+
+% COMMANDS: 
+	% To do anything in LaTeX, you must use commands
+	% Commands tell LaTeX when to start your document, how you want your document to look, and how to format your document
+	% Commands ALWAYS begin with a backslash \
+
+% Everything following the % sign is a comment and will not be used by Latex to compile your document.
+% This is very similar to # comments in R.
+
+% Every .tex file usually consists of four parts.
+% 1. Document Class
+% 2. Packages
+% 3. Header
+% 4. Your Document
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 1. Document Class
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+ % The first command you will always have will declare your document class. This tells LaTeX what type of document you are creating (article, presentation, poster, etc). 
+% \documentclass is the command
+% in {} you specify the type of document
+% in [] you define additional parameters
+ 
+\documentclass[a4paper,12pt]{article} % This defines the style of your paper
+
+% We usually use the article type. The additional parameters are the format of the paper you want to print it on and the standard font size. For us this is a4paper and 12pt.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 2. Packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Packages are libraries of commands that LaTeX can call when compiling the document. With the specialized commands you can customize the formatting of your document.
+% If the packages we call are not installed yet, TeXworks will ask you to install the necessary packages while compiling.
+
+% First, we usually want to set the margins of our document. For this we use the package geometry. We call the package with the \usepackage command. The package goes in the {}, the parameters again go into the [].
+\usepackage[top = 2.5cm, bottom = 2.5cm, left = 2.5cm, right = 2.5cm]{geometry} 
+
+% Unfortunately, LaTeX has a hard time interpreting German Umlaute. The following two lines and packages should help.
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{tikz} %for the flow chart
+\usetikzlibrary{shapes,arrows}
+
+
+\usepackage{amsmath} %math package
+\usepackage{amsmath, nccmath} %multiple fractions
+\usepackage{pgfplots} %plots
+\usepackage{pgfplotstable} %to plot from imported text files
+\pgfplotsset{compat = newest}
+\usepackage{subcaption} %figures with multiple captions
+
+% The following two packages - multirow and booktabs - are needed to create nice looking tables.
+\usepackage{multirow} % Multirow is for tables with multiple rows within one cell.
+\usepackage{booktabs} % For even nicer tables.
+
+% As we usually want to include some plots (.pdf files) we need a package for that.
+\usepackage{graphicx} 
+%Centering captions under the figures
+\usepackage[justification=centering]{caption}
+
+% The default setting of LaTeX is to indent new paragraphs. This is useful for articles. But not really nice for homework problem sets. The following command sets the indent to 0.
+\usepackage{setspace}
+\setlength{\parindent}{0in}
+
+% Package to place figures where you want them.
+\usepackage{float}
+
+% The fancyhdr package let's us create nice headers.
+\usepackage{fancyhdr}
+
+%Package for Matlab code listings:
+\usepackage[numbered, framed]{mcode}
+\lstset{stepnumber  = 5, % Line numbers go in steps of 4
+	breaklines  = true,
+	breakautoindent=true, 
+	breakindent=10pt,
+	breakatwhitespace   = false,
+	prebreak= \space,
+	postbreak   = \space}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 3. Header (and Footer)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% To make our document nice we want a header and number the pages in the footer.
+
+\pagestyle{fancy} % With this command we can customize the header style.
+
+\fancyhf{} % This makes sure we do not have other information in our header or footer.
+
+\lhead{\footnotesize UQE: Mini-project}% \lhead puts text in the top left corner. \footnotesize sets our font to a smaller size.
+
+%\rhead works just like \lhead (you can also use \chead)
+\rhead{\footnotesize Mourouga, D'Ambrosio, Tang} %<---- Fill in your lastnames.
+
+% Similar commands work for the footer (\lfoot, \cfoot and \rfoot).
+% We want to put our page number in the center.
+\cfoot{\footnotesize \thepage} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 4. Your document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Now, you need to tell LaTeX where your document starts. We do this with the \begin{document} command.
+% Like brackets every \begin{} command needs a corresponding \end{} command. We come back to this later.
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Title section of the document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% For the title section we want to reproduce the title section of the Problem Set and add your names.
+
+\thispagestyle{empty} % This command disables the header on the first page. 
+
+\begin{tabular}{p{15.5cm}} % This is a simple tabular environment to align your text nicely 
+
+%---------
+{\large \bf Uncertainty Quantification in Engineering} \\
+Spring 2021  \\
+\hline % \hline produces horizontal lines.
+\\
+\end{tabular} % Our tabular environment ends here.
+%--------------
+
+\vspace*{0.3cm} % some vertical space in between the line and our title.
+
+%----------------------------Title
+\begin{center} % Everything within the center environment is centered.
+	{\Large \bf Mini-Project} % <---- Don't forget to put in the right number
+	\vspace{2mm}
+	
+        % YOUR NAMES GO HERE
+	{\bf Gael Mourouga , Elena D'Ambrosio , Jian Tang } % <---- Fill in your names here!
+		
+\end{center}  
+%-----------------------------
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\vspace{0.4cm}
+
+%----------------First section
+\section{Model definition}
+This mini-project will study uncertainty propagation in performance models for redox-flow batteries, which are liquid batteries designed for grid-scale storage of renewable energy.
+
+\subsection{Redox-flow batteries}
+In a "classical" battery (e.g. lithium-ion), the active material is organised in layered carbon-based electrodes, whereas in a redox-flow battery, it is dissolved in a liquid electrolyte (in our case, water).\\
+On the one hand, this considerably reduces the energy density of the battery (as liquids are usually less dense than solids), but on the other hand it considerably increases the lifetime of the battery, as the charge/discharge process is more reversible.\\
+Grid-scale storage putting the emphasis on lifetime and safety rather than energy density, it is not unlikely to see redox-flow batteries emerge as serious competitors to the lithium-ion technology in the coming years.\\
+
+A concept view of a Vanadium-based flow battery is shown below:
+ \begin{figure}[H] % places figure environment here   
+    \includegraphics[width=0.9\textwidth]{FlowBattery.png} 
+    \centering % Centers Graphic
+    \caption{Vanadium flow battery from VionX (concept view)} % Creates caption underneath graph
+  \end{figure}
+
+\subsection{Cell voltage}
+The voltage in the power component is composed of three parts: an ohmic term (due to electric resistance of the cell, coming mostly from the ion-exchange membrane), a Nernstian term (which relates chemical reactions with voltage) and a Butler-Volmer overpotential term (arising from interface phenomena between the liquid electrolyte and the solid carbon felt in the power component):
+\begin{equation}
+    \boxed{U_{\text{Cell}} = U_{\text{Ohmic}} + U_{\text{Nernst}} + \eta_{BV}}
+\end{equation}
+
+\subsubsection{Ohmic term}
+The Ohmic term is expressed as:
+\begin{equation}
+    \boxed{U_{\text{Ohmic}} = R_{\text{Cell}} I}
+    \label{Ohm}
+\end{equation}
+Where $R_{\text{Cell}} $ is the cell resistance, measured through Electrochemical Impedance Spectroscopy (EIS), and $I$ is the prescribed charge/discharge current. Experimental uncertainties in the cell resistance $R_{\text{Cell}} $ will be accounted for in our uncertainty propagation model.
+
+\subsubsection{Nernstian term}
+The Nernstian term quantifies the impact of the electrochemical reactions on the cell voltage. It can be further divided in two half-cell voltages, $E_p$ (posolyte) and $E_n$ (negolyte):
+\begin{equation}
+    U_{\text{Nernst}} = E_p - E_n
+\end{equation}
+Each half-cell voltage is proportional to the ratio of the concentration of oxidised and reduced species in the corresponding electrolyte:
+\begin{equation}
+    E_{\text{p}} = E_{\text{p}}^0 + \frac{RT}{F} \ln \left( \frac{c_{T^+}}{c_{T^{2+}}} \right) + \frac{RT}{F} \ln \left( \frac{\gamma_{T^+}}{\gamma_{T^{2+}}} \right)
+\end{equation}
+And
+\begin{equation}
+    E_{\text{n}} = E_{\text{n}}^0 + \frac{RT}{F} \ln \left( \frac{c_{MV^{2+}}}{c_{MV^{+}}} \right) + \frac{RT}{F} \ln \left( \frac{\gamma_{MV^{2+}}}{\gamma_{MV^{+}}} \right)
+\end{equation}
+Where $E_{\text{p}}^0$ and $E_{\text{n}}^0$ are the thermodynamic potentials, measured through Cyclic voltammetry. R and F are the ideal gas and Faraday's constant, respectively, T is the spatially-averaged temperature (taken constant equal to 25$^{\circ}$C), $c_i$ is the spatially-averaged concentration of specie i in the corresponding electrolyte and $\gamma_i$ are activity coefficients which represent the non-ideality of the mixture at high concentrations. These coefficients being hard to measure, we will model them with uncertainty distributions.
+At SoC 50, the Nernstian term simplifies to:
+\begin{equation}
+    \boxed{U_{\text{Nernst}} = E_p^0 - E_n^0 +  \frac{RT}{F} \ln \left( \Gamma_{p} \Gamma_{n}  \right)}
+    \label{Nernst}
+\end{equation}
+Where $\Gamma_p = \gamma_{T^+}/\gamma_{T^{2+}}$ and $\Gamma_n = \gamma_{MV^+}/\gamma_{MV^{2+}}$ are the ratios of activity coefficients of species in the posolyte and negolyte, respectively.
+
+\subsubsection{Butler-Volmer overpotential}
+Assuming a no-slip condition at the boundary between the liquid electroyte and the pores of the carbon felt electrode implies the formation of a Nernst layer, where convection is negligible and transport processes are dominated by diffusion. This can result in a depletion of electroactive materials around the electrodes, due to a slower replacement of species than the consumption rate imposed by the electric current. \\
+This depletion can be expressed through a concentration difference $\Delta c = c^b - c^s$  where $c^b$ is the average concentration of electroactive specie in the bulk of the electrolyte and $c^s$ its value at the surface of the carbon felt electrode.\\
+The concentration difference $\Delta c$ is given by:
+\begin{equation}
+    \Delta c = \frac{I}{A_m Fa\left(\cfrac{Q}{A_e}\right)^b}
+\end{equation}
+Where $I$ is the electric current (A), $A_m$ is the membrane area (m$^2$), F is Farady's constant (C/mol), Q is the flow rate (m$^3$/s), $A_e$ is the electrode area (m$^2$) and a and b are experimentally fitted coefficients.\\
+From the concentration difference $\Delta c$ we can define the g function:
+\begin{equation}
+    g = 1- \frac{\Delta c}{1000}
+\end{equation}
+From which the Butler-Volmer overpotentials at the posolyte and anolyte are calculated:
+\begin{align}
+    \eta_p^{BV} &= \frac{RT}{2F} \ln \left( \frac{I + \sqrt{I^2 + 4F k_p^0 g} }{2g} \right) \\
+     \eta_n^{BV} &= \frac{RT}{2F} \ln \left( \frac{I + \sqrt{I^2 + 4F k_n^0 g} }{2g} \right) 
+\end{align}
+
+\newpage
+\section{Input parameters}
+
+\subsection{Cell resistance}
+Variations of the cell resistance during operation can be explained by different phenomena, including: intercalation of electrolyte molecules in nanochannels of the ion-exchange membrane (making the membrane more resistive) or local variations of temperature due to the Joule effect (making the membrane more conductive). We experimentally measured the minimum and maximum values of the cell resistance to be 0.280 and 0.480 $\Omega$, respectively.
+
+\subsection{Activity coefficient ratios}
+The more concentrated the electrolyte becomes, the more the influence of non-ideal mixing is noticeable. As an illustration: dissolving a very small amount of NaCl in water can be reasonably assumed to be isothermal. When larger amounts of NaCl are added, a heat of mixing can be measured, which is proportional to the non-ideality of mixing (interactions between molecules) and therefore to activity coefficients.\\
+Different models exist for expressing activity coefficients as a function of concentration (see Pitzer theory). In this mini-project, we will assume the minimum and maximum values of the activity ratios to be 0.5 and 1.5 for $\Gamma_p$, and 0.4 and 1.6 for $\Gamma_n,$ respectively.
+
+\subsection{Flow rate}
+The peristaltic pumps used in our experimental setup impose the flow rate by deforming the tubes at a given rotation speed. This results in uncertainties in the flow rate, as variations in the fluid viscosity or the tubing characteristics affect the flow rate, without affecting the rotating speed. We experimentally measured the minimum and maximum values of the flow rate to be 18 and 24 mL.min$^{-1}$, respectively.
+
+\subsection{summary}
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\multicolumn{1}{c}{\textbf{Variable}} & \multicolumn{1}{c}{\textit{Type}} & \multicolumn{1}{c}{\textit{Interval}}   \\ \hline
+R$_{\text{cell}}$ (m$ \Omega$) & uniform & [280; 480]    \\
+$\Gamma_{p}$ & uniform  & [0.5; 1.5]    \\     
+$\Gamma_{n}$ & uniform & [0.4; 1.6]     \\  
+Q (mL/min)& uniform & [18; 24]    
+\end{tabular}
+\caption{Input parameters for uncertainty propagation on the cell voltage model}
+\label{Input}
+\end{table}
+
+\clearpage
+
+\section{Definition of the MATLAB model}
+
+\subsection{Experimental design}
+We use the functions \texttt{experimental\_design.m} and \texttt{input\_sampling.m} to create the input experimental design $X = \{x^{(1)}, ..., x^{(n)}\}$ with a sample size of n from the experimental results. \\
+The function \texttt{input\_sampling.m} samples the $M=4$ distributed inputs (R$_{\text{cell}}$, $\Gamma_{p}$, $\Gamma_{n}$ and Q) through either Montecarlo or Latin Hypercube sampling methods, which create uniformly distributed samples in the interval [0,1].\\
+With an appropriate isoprobalistic transform, \texttt{experimental\_design.m} maps the sampled set into $X$, the set containing n vector-valued samples whose components are uniformly distributed on intervals of the type $[a_i,b_i]$ (carefully reported on table \ref{Input}). This set is later transformed to the model-evaluated voltage values $\mathbf{u}$ through the \texttt{voltage.m} function.\\
+To create a surrogate metamodel with a PCE expansion, we need samples of vectors with components uniformly distributed on $[-1,1]$, so \texttt{experimental\_design.m} uses another isoprobablistic transform to map the same n vector-valued samples uniformly distributed on the unit cube $[0,1]^{M}$ to the desired samples uniformly distributed on $[-1,1]$, creating the set E, which will be used to build the multivariate Legendre polynomials.
+
+
+%In the \texttt{input\_sampling.m} function, we define two different sampling methods, in this case random and Latin Hypercube sampling.  In this project, we will only use random sampling.  Besides, we also set up two desired distributions for the input parameters, which is normal distribution and uniform distribution.  To fit in the requirement of project description we will transform all the input parameters into uniform distributions, as shown in Table \ref{Input} after sampling.  The uniform distribution between $[-1,1]$ for all parameters, $E$, is also created as the input for calculating the regression matrix.
+\subsection{Regression matrix}
+With the Matlab function \texttt{regression\_matrix}, we create the regression matrix components defined as:
+$$ \mathbf{\Psi}=\mathbf{\Psi}_{ij}=\mathbf{\Psi_j}(\mathbf{x}_i),\mbox{ i=1,..n j=1..P}, $$
+where $\mathbf{\Psi}_j$ is the $j-th$ Legendre multivariate polynomial, $n$ is the size of the experimental design and $P$ is the size of the polynomial basis. 
+\\
+This Matlab function takes as inputs the number of inputs of the computational model $M$ (4), the maximum degree allowed in the polynomials $p$ (user input), the transformed experimental design $E$ (uniformly distributed variables on $[-1,1]$) and the original model values $\mathbf{u}$ on the actual experimental design ($X$).
+\\
+The function \texttt{create\_alphas.m} creates a matrix $P\times M$ (Alpha in the code) whose rows indicate the $P$ possible combinations of uni-variate polynomials we can take such that $\left| \alpha \right|= \alpha_1+ \hdots + \alpha_M \leq p$. The rows of this matrix helps us design the $i-th$ element of the multivariate $P$-dimensional Legendre polynomial basis ($P=(M+p)!/M!p!$) by multiplying uni-variate Legendre polynomials of degree $\alpha_k \mbox{ k}=1 \hdots M$ (created with the function \texttt{eval\_legendre.m}) contained in the $i-th$ row of the \texttt{create\_alphas.m} matrix. 
+\\
+Once the polynomials basis has been built and evaluated on the auxiliary variables contained in E, the regression matrix can be created. With such regression matrix and $\mathbf{u}$, we can compute the coordinates of this polynomial basis as:
+$$ \mathbf{c} = \left ( \mathbf{\Psi^{T} \Psi} \right )^{-1} \mathbf{\Psi}^{T} \mathbf{u} $$ 
+\subsection{Model evaluation}
+With the Matlab function \texttt{model\_evaluation.m}, we evaluate our surrogate model on a new vector of dimensions $M \times 1$. 
+\\
+This function takes as inputs the matrix Alpha previously computed in the function \texttt{regression\_matrix.m} to recreate the same multivariate polynomials, that in this setting are being evaluated on the new input vector (still distributed between $[-1,1]$). Another input given to this function is the vector $\mathbf{c}$ (previously computed) containing the coordinates of the PCE basis. As such, this Matlab function builds the PCE expansion evaluated on the new input vector $X$: 
+$$ U=\sum_{i=0}^P c_i \mathbf{\Psi_{i}}(\mathbf{X}). $$
+
+\subsection{Evaluation of errors}
+To validate the PCE model, two different kinds of errors, the leave-one-out error and the mean-square error, are calculated. The leave-one-out error $eLOO$ is calculated as:
+\begin{equation}
+    eLOO = \frac{1}{n} \frac{\displaystyle\sum_{i=1}^{n} \left( \cfrac{u-U}{1-h_i} \right)^2}{\displaystyle\sum_{i=1}^{n}  (u-\mu(u))^2}
+\end{equation}
+And the mean-square error $evar$ is calculated as:
+\begin{equation}
+    evar = \frac{\displaystyle\sum_{i=1}^{n} (u_{val}-U_{val})^2}{\displaystyle\sum_{i=1}^{n} (u_{val}-\mu(u_{val}))^2}  
+\end{equation}
+where $h_i$ is the i-th diagonal term of the matrix $\mathbf{\Psi}(\mathbf{\Psi}^T\mathbf{\Psi})^{-1} \mathbf{\Psi}^T$.\\
+Both can be plotted as a function of $p$ or $n$ (see Results section).\\
+\newpage
+\subsection{main.m}
+The following flow chart shows the structure of the main.m file, which generates the desired outputs from the functions defined above:
+
+% Define block styles
+\tikzstyle{output} = [draw, rectangle, rounded corners, fill=green!20, minimum height=2em]
+\tikzstyle{function} = [rectangle, draw, fill=blue!20,  text centered, rounded corners, minimum height=2em, font=\ttfamily\normalsize]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{input} = [draw, rectangle, rounded corners, fill=red!20, minimum height=2em]
+
+\begin{center}
+\begin{figure}[H]
+\begin{tikzpicture}[node distance = 3cm, auto]
+    % Place nodes
+    \node [function] (init) {input\_sampling};
+    \node [input, left of=init, node distance=6cm] (sampling) {sampling method};
+    \node [input, right of=init, node distance=6cm] (results) {experimental results};
+    \node [below of=init, node distance=3.5cm] (node) {};
+    \node [input, below of=sampling, node distance=3.5cm] (n) {n};
+    \node [function, right of=node, node distance=0cm] (design) {experimental\_design};
+    %\node [function, left of=node, node distance=4cm] (validation) {validation\_set};
+    \node[below of=design, node distance=2cm](emptydes) {};
+    %\node[below of=validation, node distance=2cm](emptyval) {};
+    \node [input, left of=emptydes, node distance=2cm] (X) {X};
+    \node [input, right of=emptydes, node distance=2cm] (E) {E};
+    \node [function, below of=X, node distance=2cm] (voltage) {voltage};
+    \node [output, right of=voltage, node distance=2.5cm] (u) {u};
+    \node [function, below of=E, node distance=3cm] (matrix) {regression\_matrix};
+    \node [input, right of=matrix, node distance=3.5cm] (p) {p};
+    \node [below of=matrix, node distance=2cm] (empty2) {};
+    \node [input, right of=empty2, node distance=1cm] (alpha) {$\alpha$};
+    \node [input, left of=empty2, node distance=1cm] (c) {c};
+    %\node [input, left of=c, node distance=3cm] (Z) {Z};
+    \node [function, below of=matrix, node distance=4cm] (evaluation) {model\_evaluation};
+    %\node [function, below of=voltage, node distance=6cm] (error) {leave\_one\_error};
+    \node [output, below of=evaluation, node distance=2cm] (U) {U};
+    %\node [below of=error, node distance=2cm] (empty3) {};
+    %\node [output, left of=empty3, node distance=1cm] (mean) {evar};
+    %\node [output, right of=empty3, node distance=1cm] (leave) {elOO};
+    %\node [ below of=leave, node distance=1cm] (empty4) {};
+   
+    
+    % Draw edges
+    \path [line] (init) -- (design);
+    %\path [line] (init) -- (validation);
+    \path [line,dashed] (results) -- (init);
+    \path [line,dashed] (sampling) -- (init);
+    \path [line,dashed] (n) -- (design);
+    \path [line] (design) -- (E);
+    \path [line] (design) -- (X);
+    \path [line,dashed] (X) -- (voltage);
+    \path [line,dashed] (E) -- (matrix);
+    \path [line] (voltage) -- (u);
+    \path [line,dashed] (u) -- (matrix);
+    \path [line,dashed] (p) -- (matrix);
+    \path [line] (matrix) -- (alpha);
+    \path [line] (matrix) -- (c);
+    %\path [line] (matrix) -- (Z);
+    \path [line,dashed] (c) -- (evaluation);
+    \path [line,dashed] (alpha) -- (evaluation);
+    %\path [line,dashed] (c) -- (error);
+    %\path [line,dashed] (alpha) -- (error);
+    %\path [line,dashed] (Z) -- (error);
+    %\path [line,dashed] (n) -- (validation);
+    %\path [line,dashed] (validation) -- (error);
+    %\path [line,dashed] (error) -- (mean);
+    %\path [line,dashed] (error) -- (leave);
+    \path [line,dashed] (evaluation) -- (U);
+    %\path [line,dashed] (evaluation) -- (error);
+\end{tikzpicture}
+    \caption{Flow chart of the structure of the main.m file. red:inputs, blue: functions, green: outputs}
+\end{figure}
+\end{center}
+
+
+\newpage
+\section{Results}
+The following plots were generated with the function \texttt{Plotting\_PCE\_6.m}, except the first one which was generated with the function \texttt{main.m}.
+\pgfplotstableread{uandUp2.dat}{\lowp}
+\pgfplotstableread{uandUp7.dat}{\highp}
+
+\pgfplotstableread{Results_N_1000.dat}{\ResultsOne}
+\pgfplotstableread{Results_N_5000.dat}{\ResultsFive}
+\pgfplotstableread{Results_N_10000.dat}{\ResultsTen}
+
+\pgfplotstableread{Results_N_1000_mean.dat}{\MeanOne}
+\pgfplotstableread{Results_N_5000_mean.dat}{\MeanFive}
+\pgfplotstableread{Results_N_10000_mean.dat}{\MeanTen}
+
+\pgfplotstableread{Results_N_1000_var.dat}{\VarOne}
+\pgfplotstableread{Results_N_5000_var.dat}{\VarFive}
+\pgfplotstableread{Results_N_10000_var.dat}{\VarTen}
+
+\pgfplotstableread{Results_N_100_bis.dat}{\BisOne}
+\pgfplotstableread{Results_N_500_bis.dat}{\BisFive}
+\pgfplotstableread{Results_N_5000_bis.dat}{\BisTen}
+  
+\subsection{Correlation of u and U}
+The correlation plot for the voltage of the battery u, in Volts, calculated from a direct model computation, and U, its value estimated from PC expansion, are shown below for polynomial degrees of p=2 (blue dots) and p=7 (red squares) for a validation set size $n=1000$.
+\begin{center}
+\begin{tikzpicture}
+  \pgfplotsset{
+      scale only axis,
+  }
+
+  \begin{axis}[
+    xlabel=$u$ (V),
+    ylabel=$U$ (V),
+    xmin=1.41,
+    xmax=1.43,
+    ymin=1.41,
+    ymax=1.43,
+    xtick={1.415,1.42,1.425}, 
+    ytick={1.415,1.42,1.425},
+    legend pos=north west,
+    xticklabel style={/pgf/number format/.cd,fixed,precision=3},
+    yticklabel style={/pgf/number format/.cd,fixed,precision=3}
+  ]
+    \addplot table[y index =1, only marks]{\lowp};
+    \addlegendentry{$p=2$}
+    \addplot table[y index =1,only marks]{\highp};
+    \addlegendentry{$p=7$}
+  \end{axis}
+\end{tikzpicture}
+\end{center}
+The plot is only shown on the interval [1.41, 1.43] for a better visualisation of the difference in spread of the data for p=2 and p=7, but the total interval is [1.34, 1.48]. We can notice a better performance for the higher polynomial degree $p=7$, as expected.
+
+\subsection{Mean}
+Here is shown the quantity $\vert \mu(u) - \mu(U) \vert$ as a function of the polynomial degree p for different values of $n$, the training set size. The mean of the exact model, $\mu(u)$, has been evaluated on the validation set of size $n=1000$. The PCE mean, $\mu(U)$, has been computed through the first coefficient ($c_0$) of the polynomial basis corresponding to the specific choice of n and p.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    \begin{axis}
+        [width=0.8\textwidth,
+        height=0.5\textwidth,
+        xlabel={$p$},
+        xmin=2,
+        xmax=9,
+        ylabel={$\vert \mu(u) - \mu(U) \vert$ (V)}
+        ]
+       \addplot table[y index =1 ]{\MeanOne};
+       \addlegendentry{$n=10^3$}
+       \addplot table[y index =1 ]{\MeanFive};
+       \addlegendentry{$n=5 \, \cdotp 10^3$}
+       \addplot table[y index =1 ]{\MeanTen};
+       \addlegendentry{$n=10^4$}
+    \end{axis}
+\end{tikzpicture}
+\end{figure}
+The mean value of the PC expansion-evaluated model U seems to converge fast and no longer depends on the training set size $n$ for degrees of $p$ higher than 4. This shows that a choice of polynomial degree 4 is already accurate to approximate the original model with the surrogate PCE model.
+\subsection{Variance}
+The plot below shows the value of $\vert\sigma^2(U)/\sigma^2(u) -1\vert$ as a function of different polynomial degrees $p$ for different training set sizes $n$. The variance of the exact model, $\sigma^2(u)$, has been evaluated on the validation set of size $n=1000$ as well. The PCE mean, $\sigma^2(U)$, has been computed through the sum of squares of PCE coefficients ($c_2^2$...$c_P^2$) of the polynomial basis, except the first one($c_0$), corresponding to the specific choice of n and p.
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}
+    \begin{axis}
+        [width=0.8\textwidth,
+        height=0.5\textwidth,
+        xlabel={$n$},
+        xmin=2,
+        xmax=9,
+        ylabel={$\vert\sigma^2(U)/\sigma^2(u) -1\vert$}
+        ]
+       \addplot table[y index =1 ]{\VarOne};
+       \addlegendentry{$n=10^3$}
+       \addplot table[y index =1 ]{\VarFive};
+       \addlegendentry{$n=5 \, \cdotp 10^3$}
+       \addplot table[y index =1 ]{\VarTen};
+       \addlegendentry{$n=10^4$}
+    \end{axis}
+\end{tikzpicture}
+\end{figure}
+The ratio of the variance seems to get closer to 1 with the polynomial degree $p$, up to degree $p=4$, which coincides with the result of mean value.
+
+\subsection{Errors}
+The plot below shows the results the mean-square error $evar$ as a function of the training set size $n$ for different polynomial degrees $p$. This error has been computed exploiting the solution of the exact model evaluated on the validation set of size $n=1000$, together with the PCE surrogate solution built for different choices of n and p and then evaluated on the same validation set as the original solution.
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}
+        [ymode=log,
+        width=0.8\textwidth,
+        height=0.55\textwidth,
+        xlabel={$p$},
+        xmin=2,
+        xmax=9,
+        ylabel={evar}
+        ]
+       \addplot table[y index =2 ]{\ResultsOne};
+       \addlegendentry{$n=10^3$}
+       \addplot table[y index =2 ]{\ResultsFive};
+       \addlegendentry{$n=5 \, \cdotp 10^3$}
+       \addplot table[y index =2 ]{\ResultsTen};
+       \addlegendentry{$n=10^4$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+The mean-square error seems to decrease as a function of both $n$ and $p$, although the polynomial degree plays a more crucial role than the training set size $n$.\\
+The plot below shows the results the leave-one out error $eLOO$ as a function of the training set sizes $n$ for different polynomial degrees $p$. The training set was always the same for the different polynomial degrees for a fixed size of n. The leave one out error then has been computed on the corresponding training set. 
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}
+        [ymode=log,
+        width=0.8\textwidth,
+        height=0.55\textwidth,
+        xlabel={$p$},
+        xmin=2,
+        xmax=9,
+        ylabel={elOO}
+        ]
+       \addplot table[y index =1 ]{\ResultsOne};
+       \addlegendentry{$n=10^3$}
+       \addplot table[y index =1 ]{\ResultsFive};
+       \addlegendentry{$n=5 \, \cdotp 10^3$}
+       \addplot table[y index =1 ]{\ResultsTen};
+       \addlegendentry{$n=10^4$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+The leave-one-out error also seems to decrease both as a function of $n$ and $p$, while depending more on $n$ than the mean-square error. Although the leave-one-error underestimates the mean-square error a little bit, it is a great alternative of mean-square error for us to judge the accuracy of the PCE model, which avoids creating new validation set.\\
+
+\section{Impact of small training set size}
+To get an accurate PCE model, we need to input enough training data points.  Normally, the required points number should be 2 or 3 times more than $(M+p)!/M!p!$, where M and p denote the number of input feature and the polynomial order.  This is why we can see a increase of the mean-square error and leave-one-error at low training data set size $n$ and high polynomial order $p$ in the previous figures. The following figures will show this trend more clearly with a smaller training data size n.\\
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}
+        [ymode=log,
+        width=0.8\textwidth,
+        height=0.5\textwidth,
+        xlabel={$p$},
+        xmin=2,
+        xmax=9,
+        ylabel={evar},
+        legend style={at={(0.02,0.872)},anchor=west}
+        ]
+       \addplot table[y index =2 ]{\BisOne};
+       \addlegendentry{$n=10^2$}
+       \addplot table[y index =2 ]{\BisFive};
+       \addlegendentry{$n=5 \, \cdotp 10^2$}
+       \addplot table[y index =2 ]{\BisTen};
+       \addlegendentry{$n=5 \, \cdotp 10^3$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}
+    \begin{axis}
+        [ymode=log,
+        width=0.8\textwidth,
+        height=0.5\textwidth,
+        xlabel={$p$},
+        xmin=2,
+        xmax=9,
+        ylabel={elOO}
+        ]
+       \addplot table[y index =1 ]{\BisOne};
+       \addlegendentry{$n=10^2$}
+       \addplot table[y index =1 ]{\BisFive};
+       \addlegendentry{$n=5 \, \cdotp 10^2$}
+       \addplot table[y index =1 ]{\BisTen};
+       \addlegendentry{$n=5 \, \cdotp 10^3$}
+    \end{axis}
+\end{tikzpicture}
+\end{center}
+\end{document}
